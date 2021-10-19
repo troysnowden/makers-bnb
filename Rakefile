@@ -1,6 +1,7 @@
 require 'pg'
 
- task :test_database_setup do
+# :nocov:
+task :test_database_setup do
    p "Cleaning database..."
 
    connection = PG.connect(dbname: 'mbnb_test')
@@ -27,3 +28,4 @@ require 'pg'
      # TODO: same as above for bookings table
    end
  end
+ # :nocov:
