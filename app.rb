@@ -14,7 +14,7 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/register" do
-    "Register page containing form and submit button"
+    erb(:registration)
   end
 
   post "/register" do
