@@ -1,36 +1,36 @@
-# frozen_string_literal: true
-
 require 'sinatra'
 require 'sinatra/reloader' if development?
 
 class MakersBnb < Sinatra::Base
+  
   # :nocov:
   configure :development do
     register Sinatra::Reloader
   end
   # :nocov:
 
-  get '/' do # index page
-    erb(:index)
+  get "/" do # index page
+    erb (:index)
   end
 
-  get '/register' do
+  get "/register" do
     erb(:registration)
   end
 
-  post '/register' do
+  post "/register" do
     # adds user to db
   end
 
-  get '/manage-accommodation' do
-    erb(:manage_accommodation)
+  get "/manage-accommodation" do
+    erb (:manage_accommodation)
   end
 
-  get '/add-accommodation' do
+  get "/add-accommodation" do
     erb :add_accommodation
   end
 
-  post '/add-accommodation' do
+  post "/add-accommodation" do
     # add accommodation to db
   end
+
 end
