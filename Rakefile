@@ -6,7 +6,7 @@ require 'pg'
    connection = PG.connect(dbname: 'mbnb_test')
 
    # Clear the database
-   connection.exec("TRUNCATE users;")
+   connection.exec("TRUNCATE users CASCADE;")
    connection.exec("TRUNCATE accommodations;")
   #  connection.exec("TRUNCATE bookings;")
 
