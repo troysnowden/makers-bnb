@@ -31,6 +31,7 @@ class MakersBnb < Sinatra::Base
 
   post "/add-accommodation" do
     # add accommodation to db
+    AccommodationAccessor.create(Accommodation.new(params[:name], params[:description], params[:price_per_night]))
   end
 
 end
