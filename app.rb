@@ -22,7 +22,7 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/manage-accommodation" do
-    "Page containing list of user's accommodations and add accommodation button"
+    erb (:manage_accommodation)
   end
 
   get "/add-accommodation" do
