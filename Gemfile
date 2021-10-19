@@ -5,8 +5,8 @@ source 'https://rubygems.org'
 ruby '3.0.0'
 
 gem 'pg'
-gem 'sinatra'
 gem 'rake'
+gem 'sinatra'
 
 group :test do
   gem 'capybara'
@@ -19,6 +19,6 @@ group :development, :test do
   gem 'rubocop', '1.20'
 end
 
-gem "sinatra-contrib", "~> 2.1"
+gem 'sinatra-contrib', '~> 2.1'
 
-gem "webrick", "~> 1.7"
+gem 'webrick', '~> 1.7'
