@@ -26,7 +26,7 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/add-accommodation" do
-    "Containing form with accommodation details to fill out and submit button"
+    erb :add_accommodation
   end
 
   post "/add-accommodation" do
