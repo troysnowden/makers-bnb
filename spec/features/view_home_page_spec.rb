@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 feature 'Viewing homepage' do
   scenario 'visits homepage' do
     visit('/')
