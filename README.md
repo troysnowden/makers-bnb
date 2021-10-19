@@ -7,6 +7,8 @@ run ```rvm use 3.0.0```
 ```rspec``` you should see 1 passing test.
 
 # Database setup
+TODO: Replace the below with just 'rake setup'
+
 Run the following code in ```psql```:
 
 Create 2 databases
