@@ -6,6 +6,10 @@ run ```rvm use 3.0.0```
 ```bundle install```
 ```rspec``` you should see 1 passing test.
 
+# Database setup
+Run ```rake setup```
+
+
 # git workflow
 ```git checkout main```
 ```git pull```
