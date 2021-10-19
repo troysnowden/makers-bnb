@@ -10,7 +10,7 @@ class MakersBnb < Sinatra::Base
   # :nocov:
 
   get "/" do # index page
-    "Home page containing manage my accommodation link"
+    erb (:index)
   end
 
   get "/register" do
