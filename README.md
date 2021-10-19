@@ -6,6 +6,16 @@ run ```rvm use 3.0.0```
 ```bundle install```
 ```rspec``` you should see 1 passing test.
 
+# Database setup
+Run the following code in ```psql```:
+
+Create 2 databases
+```CREATE DATABASE MBNB```
+```CREATE DATABASE MBNB_test```
+
+Then you can use the code in the db/migrations folder to create your tables.
+
+
 # git workflow
 ```git checkout main```
 ```git pull```
