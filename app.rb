@@ -30,6 +30,7 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/register" do
+    redirect "test-homepage"
     # adds user to db
   end
 
