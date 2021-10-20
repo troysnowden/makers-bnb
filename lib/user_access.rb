@@ -12,6 +12,10 @@ class UserAccess
       end 
       
       def login(first_name, last_name)
+        result = DatabaseConnection.connect_to_db.exec_params(
+          "SELECT * FROM users WHERE first_name = $1 AND last_name = $2;",  [first_name, last_name])
+          User.new(result[0]['id'], result[0]['first_name'], result[0]['last_name'])
+
         ## check given names are in db, if so return user
       end
 
