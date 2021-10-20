@@ -37,4 +37,8 @@ class MakersBnb < Sinatra::Base
     erb :book_accommodation
   end
 
+  post "/book-accommodation" do
+    erb :book_accommodation
+  end
+
 end
