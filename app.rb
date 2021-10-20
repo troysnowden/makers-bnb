@@ -1,7 +1,10 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
+require './lib/user_access'
 
 class MakersBnb < Sinatra::Base
+
+  enable :sessions
   
   # :nocov:
   configure :development do
@@ -10,6 +13,7 @@ class MakersBnb < Sinatra::Base
   # :nocov:
 
   get "/" do # index page
+    @user = session[:user] unless session[:user].nil?
     # if user.logged_in?
     erb (:index)
     # else
@@ -30,7 +34,8 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/register" do
-    "Hello!"
+    new_user = UserAccess.register(params[:first_name], params[:last_name])
+    session[:user] = UserAccess.login(new_user.first_name, new_user.last_name)
     redirect "/"
   end
 

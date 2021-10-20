@@ -9,7 +9,6 @@ describe UserAccess do
             expect(new_user.last_name).to eq "snowdon"
         end   
 
-
     end 
 
     describe '#login' do
@@ -27,7 +26,6 @@ describe UserAccess do
             expect(registered_user).to eq false
           
         end   
-
 
     end 
 
