@@ -1,0 +1,15 @@
+.login-register {
+  padding: 10px;
+  background-color: blueviolet;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.image-container {
+    width: 500px;
+    height: 400px;
+}
+
+.main-photo {
+    max-width: 100%;
+}

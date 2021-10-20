@@ -10,7 +10,7 @@ describe User do
       it "should initalize with correct attributes" do
         test_user = described_class.new(01,'tom','s')
         expect(test_user).to have_attributes(
-            user_ID: 01,
+            user_id: 01,
             first_name: "tom",
             last_name: "s"
         )
