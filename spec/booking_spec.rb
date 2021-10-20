@@ -56,7 +56,7 @@ describe Booking do
 
   describe '.create' do
     it 'creates a new booking' do
-      booking = Booking.create(visitor_id: '123456', accommodation_id: '654321', confirmed: true, total_cost: 80)
+      booking = Booking.create(visitor_id: '123456', accommodation_id: '654321', booked_date: '2021-10-21', total_cost: 80)
       persisted_data = persisted_data(id: booking.id)
 
       expect(booking).to be_a Booking

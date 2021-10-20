@@ -23,7 +23,7 @@ class Booking
   #   end
   # end
 
-  def self.create(visitor_id:, accommodation_id:, confirmed:, total_cost:)
+  def self.create(visitor_id:, accommodation_id:, booked_date:, total_cost:)
     if ENV['ENVIRONMENT'] == 'test'
      connection = PG.connect(dbname: 'mbnb_test')
     else
@@ -31,9 +31,9 @@ class Booking
     end
 
     result = connection.exec_params(
-      "INSERT INTO bookings (visitor_id, accommodation_id, confirmed, total_cost) VALUES($1, $2, $3, $4) RETURNING id, visitor_id, accommodation_id, confirmed, total_cost;", [visitor_id, accommodation_id, confirmed, total_cost]
+      "INSERT INTO bookings (visitor_id, accommodation_id, booked_date, total_cost) VALUES($1, $2, $3, $4) RETURNING id, visitor_id, accommodation_id, booked_date, total_cost;", [visitor_id, accommodation_id, booked_date, total_cost]
     )
-    Booking.new(id: result[0]['id'], visitor_id: result[0]['visitor_id'], accommodation_id: result[0]['accommodation_id'], confirmed: result[0]['confirmed'], total_cost: result[0]['total_cost'])
+    Booking.new(id: result[0]['id'], visitor_id: result[0]['visitor_id'], accommodation_id: result[0]['accommodation_id'], booked_date: result[0]['booked_date'], total_cost: result[0]['total_cost'])
   end  
 
   def confirm
