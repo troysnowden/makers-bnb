@@ -1,7 +1,7 @@
 class User
     attr_reader :first_name , :last_name , :user_id 
     def initialize(user_id, first_name, last_name)
-        @user_ID = user_id
+        @user_id = user_id
         @first_name = first_name
         @last_name = last_name
 
