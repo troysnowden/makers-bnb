@@ -18,7 +18,8 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/register" do
-    # adds user to db
+    "Hello!"
+    redirect "/"
   end
 
   get "/manage-accommodation" do
