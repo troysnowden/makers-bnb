@@ -20,15 +20,6 @@ class MakersBnb < Sinatra::Base
     # erb(:homepage)
   end
 
-  # route to be removed when we can check if a user is logged in
-  # just here to aid testing
-  get "/test-homepage" do # index page
-    # if user.logged_in?
-    # erb (:index)
-    # else
-    erb(:homepage)
-  end
-
   get "/register" do
     erb(:registration)
   end
@@ -44,8 +35,9 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/login" do
-    redirect "test-homepage"
-    # sets logged in to true
+    session[:user] = UserAccess.login(params[:first_name], params[:last_name])
+    redirect "/login" if session[:user].nil? # add flash at some point to signify incorrect details
+    redirect "/"
   end
 
   get "/manage-accommodation" do

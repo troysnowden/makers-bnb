@@ -23,7 +23,7 @@ describe UserAccess do
 
         it 'should raise an error when users are not registered when trying to log in' do
             registered_user = UserAccess.login('troy', 'snowdon')
-            expect(registered_user).to eq false
+            expect(registered_user).to eq nil
           
         end   
 
