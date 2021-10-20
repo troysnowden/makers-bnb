@@ -30,7 +30,17 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/register" do
+    redirect "test-homepage"
     # adds user to db
+  end
+
+  get "/login" do
+    erb(:login)
+  end
+
+  post "/login" do
+    redirect "test-homepage"
+    # sets logged in to true
   end
 
   get "/manage-accommodation" do
