@@ -10,8 +10,6 @@ task :test_database_setup do
 
   # Clear the database
   connection.exec('TRUNCATE users CASCADE;')
-  connection.exec('TRUNCATE accommodations;')
-  connection.exec("TRUNCATE bookings;")
 
   # Add the test data
 end
