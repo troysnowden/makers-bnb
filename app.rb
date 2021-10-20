@@ -10,7 +10,19 @@ class MakersBnb < Sinatra::Base
   # :nocov:
 
   get "/" do # index page
+    # if user.logged_in?
     erb (:index)
+    # else
+    # erb(:homepage)
+  end
+
+  # route to be removed when we can check if a user is logged in
+  # just here to aid testing
+  get "/test-homepage" do # index page
+    # if user.logged_in?
+    # erb (:index)
+    # else
+    erb(:homepage)
   end
 
   get "/register" do
