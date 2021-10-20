@@ -9,5 +9,7 @@ feature 'Viewing landing page' do
     expect(page.find('#maldives')['src']).to have_content 'maldives.jpeg'
     expect(page.find('#maldives')['alt']).to have_content 'A beach in the maldives'
 
+    expect(page.find('#register-link')['href']).to have_content '/register'
+    expect(page.find('#login-link')['href']).to have_content '/login'
   end
 end
