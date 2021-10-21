@@ -14,12 +14,9 @@ class AccommodationAccess
 
     def all_available_within_max_price_on_date(max_price, chosen_date)
       accommodation_array = []
-      result = DatabaseConnection.connect_to_db.exec_params("SELECT * from accommodations WHERE '#{chosen_date}' IN (SELECT date FROM bookings WHERE date = '#{chosen_date}');")
-      p result.ntuples
-      result.each{|r| p r}
       result = DatabaseConnection.connect_to_db.exec_params(
-        "SELECT * from accommodations WHERE price_per_night <= $1;",
-         [max_price])
+        "SELECT * from accommodations WHERE price_per_night <= $1 AND id NOT IN (SELECT accommodation_id FROM bookings where date = $2);",
+         [max_price, chosen_date])
 
       result.each do |r|
         accommodation_array << Accommodation.new(r['id'], r['owner_id'], r['name'], r['description'], r['price_per_night'])

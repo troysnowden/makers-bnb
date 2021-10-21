@@ -57,7 +57,6 @@ describe AccommodationAccess do
     it 'should return only accommodation available on date given' do
       # Accommodation that should not be returned by this method, as it will not be available on the date passed in
       new_accom = AccommodationAccess.create(not_our_user, "Unavailable accommodation", "Brief description", 30)
-      # Booking.create() and pass in new_accom.id
       booking_to_confirm = BookingAccess.create(
         not_our_user.user_id, new_accom.accommodation_id, new_accom.price_per_night, "2022-09-08")
       BookingAccess.confirm_booking_when_request_accepted(booking_to_confirm.booking_id)
