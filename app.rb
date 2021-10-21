@@ -53,6 +53,11 @@ class MakersBnb < Sinatra::Base
     erb (:manage_accommodation)
   end
 
+  post "/manage-accommodation" do
+    # add accommodation to db
+    redirect "/manage-accommodation"
+  end
+
   get "/add-accommodation" do
     erb :add_accommodation
   end
