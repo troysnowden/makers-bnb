@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Booking
   attr_reader :accommodation_id, :visitor_id, :total_cost, :booked_date, :confirmed
 
