@@ -16,15 +16,15 @@
   <% @test_accoms.each do |accom| %>
       <div class="accom-card">
         <div class="accom-container">
-          <h3><%= accom[:name] %></h3>
-          <p><%= accom[:description] %></p>
-          <p><i>£<%= accom[:price] %> per night</i></p>
+          <h3><%= accom.name %></h3>
+          <p><%= accom.description %></p>
+          <p><i>£<%= accom.price_per_night %> per night</i></p>
             <form action="/book-accommodation" method="POST">
-              <input type="hidden" id="name" name="name" value=<%= accom[:name] %>>
-              <input type="hidden" id="description" name="description" value=<%= accom[:description] %>>
-              <input type="hidden" id="price" name="price" value=<%= accom[:price] %>>
-              <input type="hidden" id="id" name="id" value=<%= accom[:id] %>>
-              <input type="submit" id="submit-booking-<%=accom[:id]%>" value="Book <%=accom[:name]%>">
+              <input type="hidden" id="name" name="name" value=<%= accom.name %>>
+              <input type="hidden" id="description" name="description" value=<%= accom.description %>>
+              <input type="hidden" id="price" name="price" value=<%= accom.price_per_night %>>
+              <input type="hidden" id="id" name="id" value=<%= accom.accommodation_id %>>
+              <input type="submit" id="submit-booking-<%=accom.accommodation_id %>" value="Book <%= accom.name %>">
             </form>
         </div>
       </div>

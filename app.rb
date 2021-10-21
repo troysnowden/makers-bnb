@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require './lib/user_access'
+require './lib/accommodation_access'
 
 class MakersBnb < Sinatra::Base
 
@@ -68,20 +69,18 @@ class MakersBnb < Sinatra::Base
 
   get "/book-accommodation" do
     # this will be replaced with db call 
-    $test_accoms = [
-      {:name => "Sunny Sands", :description => "coarse and rough", :price => "80", :id => 1},
-      {:name => "Coastal Chalet", :description => "nice pillows", :price => "1000", :id => 2},
-      {:name => "Riviera Retreat", :description => "great apart from the smell", :price => "300", :id => 3}
-    ]
-    @test_accoms = $test_accoms
+    
+    @test_accoms = AccommodationAccess.all_available
     erb :book_accommodation
   end
 
   post "/book-accommodation" do
-    session[:selected_booking] = $test_accoms.select { |key, value| 
-       key[:id].to_i == params[:id].to_i
+    session[:selected_booking] = AccommodationAccess.all_available.select { |key, value| 
+       key.accommodation_id.to_i == params[:id].to_i
     }[0]
 
+    # actually redirect to the confirm booking screen
+    
     redirect "/"
   end
 
