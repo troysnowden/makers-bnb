@@ -25,6 +25,8 @@ require 'simplecov-console'
 require 'rake'
 require 'web_helpers'
 
+ENV['ENVIRONMENT'] = 'test'
+
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::Console,
   SimpleCov::Formatter::HTMLFormatter

@@ -40,8 +40,22 @@ class MakersBnb < Sinatra::Base
     redirect "/"
   end
 
+  get "/login" do
+    erb(:login)
+  end
+
+  post "/login" do
+    redirect "test-homepage"
+    # sets logged in to true
+  end
+
   get "/manage-accommodation" do
     erb (:manage_accommodation)
+  end
+
+  post "/manage-accommodation" do
+    # add accommodation to db
+    redirect "/manage-accommodation"
   end
 
   get "/add-accommodation" do
@@ -50,6 +64,14 @@ class MakersBnb < Sinatra::Base
 
   post "/add-accommodation" do
     # add accommodation to db
+  end
+
+  get "/book-accommodation" do
+    erb :book_accommodation
+  end
+
+  post "/book-accommodation" do
+    # add a booking to db
   end
 
 end
