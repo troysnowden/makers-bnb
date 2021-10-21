@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'booking'
 
 describe Booking do
@@ -9,11 +7,11 @@ describe Booking do
     end
 
     it 'should initalize with correct attributes' do
-      test_booking = described_class.new(1, 2, 10, '01/02/2022')
+      test_booking = described_class.new(1, 2, '01/02/2022', 10)
 
       expect(test_booking).to have_attributes(
-        accom_id: 1,
-        visitor_id: 2,
+        visitor_id: 1,
+        accommodation_id: 2,
         total_cost: 10,
         date: '01/02/2022',
         confirmed: false
@@ -32,4 +30,5 @@ describe Booking do
       }.from(false).to(true)
     end
   end
+
 end

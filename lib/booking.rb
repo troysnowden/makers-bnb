@@ -1,11 +1,10 @@
-# frozen_string_literal: true
-
 class Booking
-  attr_reader :accom_id, :visitor_id, :total_cost, :date, :confirmed
 
-  def initialize(accom_id, visitor_id, total_cost, date)
-    @accom_id = accom_id
+  attr_reader :accommodation_id, :visitor_id, :total_cost, :date, :confirmed
+
+  def initialize(visitor_id, accommodation_id, date, total_cost)
     @visitor_id = visitor_id
+    @accommodation_id = accommodation_id
     @total_cost = total_cost
     @date = date
     @confirmed = false
