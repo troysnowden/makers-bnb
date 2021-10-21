@@ -1,4 +1,3 @@
-require 'database_helpers'
 require 'booking'
 
 describe Booking do
