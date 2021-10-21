@@ -85,4 +85,8 @@ class MakersBnb < Sinatra::Base
     redirect "/"
   end
 
+  get "/view-bookings" do
+    erb :view_bookings
+  end
+
 end
