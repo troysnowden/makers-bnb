@@ -5,6 +5,8 @@ class UserAccess
 
     class << self
 
+      @@database_connection = DatabaseConnection.connect_to_db
+
       def register(first_name, last_name)
         result = DatabaseConnection.connect_to_db.exec_params(
         "INSERT INTO users (first_name, last_name) VALUES($1, $2) RETURNING id, first_name, last_name;", [first_name, last_name])

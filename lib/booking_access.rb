@@ -2,8 +2,11 @@ require 'booking'
 
 class BookingAccess
   class << self
+
+    @@database_connection = DatabaseConnection.connect_to_db
+
     def all_requests_for_accommodation_owner(user_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "SELECT * FROM bookings WHERE NOT confirmed AND accommodation_id IN
         (SELECT id from accommodations WHERE owner_id = $1);",[user_id])
       
@@ -11,7 +14,7 @@ class BookingAccess
     end
 
     def all_confirmed_for_accommodation_owner(user_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "SELECT * from bookings WHERE confirmed AND accommodation_id IN 
         (SELECT id from accommodations WHERE owner_id = $1);", [user_id])
         
@@ -19,35 +22,35 @@ class BookingAccess
     end
 
     def all_requests_for_visitor(user_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "SELECT * FROM bookings WHERE NOT confirmed AND visitor_id = $1;", [user_id])
       
       map_records_to_array_of_booking_objects(result)
     end
 
     def all_confirmed_for_visitor(user_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "SELECT * from bookings WHERE confirmed AND visitor_id = $1;", [user_id])
 
       map_records_to_array_of_booking_objects(result)
     end
 
     def create(visitor_id, accommodation_id, total_cost, date)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "INSERT INTO bookings(visitor_id, accommodation_id, confirmed, total_cost, date) VALUES ($1, $2, $3, $4, $5) RETURNING *;", 
 [visitor_id, accommodation_id, false, total_cost, date])
         map_single_record_to_booking_object(result)
     end
 
     def confirm_booking_when_request_accepted(booking_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "UPDATE bookings SET confirmed = $1 WHERE id = $2 RETURNING *;", [true, booking_id])
       
       map_single_record_to_booking_object(result)
     end
 
     def delete_booking_when_request_denied(booking_id)
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "DELETE FROM bookings WHERE id = $1;", [booking_id])
     end
 

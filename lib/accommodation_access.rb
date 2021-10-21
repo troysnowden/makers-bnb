@@ -4,9 +4,11 @@ require 'database_connection'
 class AccommodationAccess
   class << self
 
+    @@database_connection = DatabaseConnection.connect_to_db
+
     def all_owned_by_user(user) # pass in user or user_id?
       # get all accommodations where owner_id = user.user_id
-      result = DatabaseConnection.connect_to_db.exec_params('SELECT * FROM accommodations WHERE owner_id = $1;', [user.user_id])
+      result = @@database_connection.exec_params('SELECT * FROM accommodations WHERE owner_id = $1;', [user.user_id])
       
       result.map{ |accommodation| Accommodation.new(accommodation['id'], accommodation['user_id'], accommodation['name'], accommodation['description'], accommodation['price_per_night']) }
      
@@ -14,7 +16,7 @@ class AccommodationAccess
 
     def all_available_within_max_price_on_date(max_price, chosen_date)
       accommodation_array = []
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "SELECT * from accommodations WHERE price_per_night <= $1 AND id NOT IN (SELECT accommodation_id FROM bookings where date = $2);",
          [max_price, chosen_date])
 
@@ -26,7 +28,7 @@ class AccommodationAccess
 
     def create(user, name, description, price_per_night)
       # insert accommodation into accommodations table
-      result = DatabaseConnection.connect_to_db.exec_params(
+      result = @@database_connection.exec_params(
         "INSERT INTO accommodations(owner_id, name, description, price_per_night) VALUES ($1, $2, $3, $4) RETURNING *;", 
 [user.user_id, name, description, price_per_night])
       Accommodation.new(

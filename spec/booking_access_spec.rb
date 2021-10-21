@@ -129,6 +129,12 @@ describe BookingAccess do
   end
 
   describe '#delete_booking_when_request_denied' do
+    it 'should remove the booking request for the user that submitted it' do
+      booking_to_delete = BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-19")
 
+      expect(BookingAccess.all_requests_for_visitor(user.user_id).length).to eq 1
+      BookingAccess.delete_booking_when_request_denied(booking_to_delete.booking_id)
+      expect(BookingAccess.all_requests_for_visitor(user.user_id).length).to eq 0
+    end
   end
 end
