@@ -17,7 +17,7 @@ class AccommodationAccess
     def all_available_within_max_price_on_date(max_price, chosen_date)
       accommodation_array = []
       result = @@database_connection.exec_params(
-        "SELECT * from accommodations WHERE price_per_night <= $1 AND id NOT IN (SELECT accommodation_id FROM bookings where date = $2);",
+        "SELECT * from accommodations WHERE price_per_night <= $1 AND id NOT IN (SELECT accommodation_id FROM bookings where date = $2 AND confirmed);",
          [max_price, chosen_date])
 
       result.each do |r|

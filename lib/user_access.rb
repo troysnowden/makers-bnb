@@ -8,7 +8,7 @@ class UserAccess
       @@database_connection = DatabaseConnection.connect_to_db
 
       def register(first_name, last_name)
-        result = DatabaseConnection.connect_to_db.exec_params(
+        result = @@database_connection.exec_params(
         "INSERT INTO users (first_name, last_name) VALUES($1, $2) RETURNING id, first_name, last_name;", [first_name, last_name])
         
         map_single_record_to_user_object(result)
@@ -16,7 +16,7 @@ class UserAccess
       
       def login(first_name, last_name)
         ## check given names are in db, if so return user, otherwise return nil
-        result = DatabaseConnection.connect_to_db.exec_params(
+        result = @@database_connection.exec_params(
           "SELECT * FROM users WHERE first_name = $1 AND last_name = $2;",  [first_name, last_name])
         return nil unless result.ntuples.positive?
         
