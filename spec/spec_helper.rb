@@ -23,6 +23,7 @@ require 'rspec'
 require 'simplecov'
 require 'simplecov-console'
 require 'rake'
+require 'web_helpers'
 
 ENV['ENVIRONMENT'] = 'test'
 

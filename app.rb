@@ -1,7 +1,10 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
+require './lib/user_access'
 
 class MakersBnb < Sinatra::Base
+
+  enable :sessions
   
   # :nocov:
   configure :development do
@@ -10,19 +13,11 @@ class MakersBnb < Sinatra::Base
   # :nocov:
 
   get "/" do # index page
+    @user = session[:user] unless session[:user].nil?
     # if user.logged_in?
     erb (:index)
     # else
     # erb(:homepage)
-  end
-
-  # route to be removed when we can check if a user is logged in
-  # just here to aid testing
-  get "/test-homepage" do # index page
-    # if user.logged_in?
-    # erb (:index)
-    # else
-    erb(:homepage)
   end
 
   get "/register" do
@@ -30,7 +25,19 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/register" do
-    # adds user to db
+    new_user = UserAccess.register(params[:first_name], params[:last_name])
+    session[:user] = UserAccess.login(new_user.first_name, new_user.last_name)
+    redirect "/"
+  end
+
+  get "/login" do
+    erb(:login)
+  end
+
+  post "/login" do
+    session[:user] = UserAccess.login(params[:first_name], params[:last_name])
+    redirect "/login" if session[:user].nil? # add flash at some point to signify incorrect details
+    redirect "/"
   end
 
   get "/login" do

@@ -11,8 +11,13 @@
     </div>
     
     <div class="login-register" id="login-register">
-        <a id="register-link" href="/register"><button class="register_button"type="button">Register</button></a>
-        <a id="login-link" href="/login"><button type="login_button">Log in</button></a>
+        <% if @user %>
+            <a id="manage-accom-link" href="/manage-accommodation"><button id="manage-button" type="button">Manage accommodation</button></a>
+            <a id="book-accom-link" href="/book-accommodation"><button id="book-button" type="button">Book accommodation</button></a>
+        <% else %>
+            <a id="register-link" href="/register"><button class="register_button"type="button">Register</button></a>
+            <a id="login-link" href="/login"><button type="login_button">Log in</button></a>
+        <% end %>
     </div>
     <div class="image-container">
         <img id="maldives" alt="A beach in the maldives" class="main-photo"src="/assets/images/maldives.jpeg">
