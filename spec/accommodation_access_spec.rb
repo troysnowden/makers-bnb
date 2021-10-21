@@ -25,7 +25,7 @@ describe AccommodationAccess do
       expect(accommodations.length).to eq(1)
       expect(accommodations[0].name).to eq("My accommodation")
       expect(accommodations[0].description).to eq("Brief description")
-      expect(accommodations[0].price_per_night).to eq(30)
+      expect(accommodations[0].price_per_night).to eq("30.00")
     end
 
     it 'should not return any accommodations not owned by user' do
@@ -45,7 +45,7 @@ describe AccommodationAccess do
       expect(accommodations.length).to eq(1)
       expect(accommodations[0].name).to eq("My accommodation")
       expect(accommodations[0].description).to eq("Brief description")
-      expect(accommodations[0].price_per_night).to eq(30)
+      expect(accommodations[0].price_per_night).to eq("30.00")
     end
   end
 
