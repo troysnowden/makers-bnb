@@ -2,8 +2,15 @@ require 'accommodation'
 
 class AccommodationAccess
   class << self
+
+   
+
     def all_owned_by_user(user) # pass in user or user_id?
       # get all accommodations where owner_id = user.user_id
+      result = DatabaseConnection.connect_to_db.exec_params('SELECT * FROM accommodations WHERE owner_id = $1;', [user.user_id])
+      
+      result.map{ |accommodation| Accommodation.new(accommodation['id'], accommodation['user_id'], accommodation['name'], accommodation['description'], accommodation['price_per_night']) }
+     
     end
 
     def all_available_within_max_price_on_date(max_price, chosen_date)
