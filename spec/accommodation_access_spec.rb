@@ -61,6 +61,29 @@ describe AccommodationAccess do
       # Accommodation that should be returned by this method
       allow(accommodation).to receive(:name). and_return("Valid accommodation")
       allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
+      allow(accommodation).to receive(:price_per_night). and_return(60)
+      AccommodationAccess.create(new_user, accommodation)
+
+      accommodations = AccommodationAccess.all_available_within_max_price_on_date(60, "08/09/2022")
+      expect(accommodations.length).to eq(1)
+      expect(accommodations[0].name).to eq("Valid accommodation")
+      expect(accommodations[0].description).to eq("Brief description")
+      expect(accommodations[0].price_per_night).to eq('60.00')
+    end
+
+    # :nocov:
+    xit 'should return only accommodation available on date given' do
+      # Accommodation that should not be returned by this method
+      # When bookings class built come back and create a booking for 08/09/2022
+      allow(accommodation).to receive(:owner_id). and_return(not_our_user.user_id)
+      allow(accommodation).to receive(:name). and_return("Not valid accommodation")
+      allow(accommodation).to receive(:description). and_return("Brief description")
+      allow(accommodation).to receive(:price_per_night). and_return(70)
+      AccommodationAccess.create(user, accommodation)
+
+      # Accommodation that should be returned by this method
+      allow(accommodation).to receive(:name). and_return("Valid accommodation")
+      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
       allow(accommodation).to receive(:price_per_night). and_return(30)
       AccommodationAccess.create(new_user, accommodation)
 
@@ -68,8 +91,9 @@ describe AccommodationAccess do
       expect(accommodations.length).to eq(1)
       expect(accommodations[0].name).to eq("Valid accommodation")
       expect(accommodations[0].description).to eq("Brief description")
-      expect(accommodations[0].price_per_night).to eq(30)
+      expect(accommodations[0].price_per_night).to eq('30.00')
     end
+    # :nocov:
   end
 
   describe '#create' do
