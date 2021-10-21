@@ -7,64 +7,63 @@ class BookingAccess
         "SELECT * FROM bookings WHERE NOT confirmed AND accommodation_id IN
         (SELECT id from accommodations WHERE owner_id = $1);",[user_id])
       
-      result.map{ |booking_request| 
-      Booking.new(booking_request['id'], booking_request['visitor_id'], 
-      booking_request['accommodation_id'], booking_request['total_cost'],booking_request['date'], booking_request['confirmed']) }
-        
+      map_records_to_array_of_booking_objects(result)
     end
 
     def all_confirmed_for_accommodation_owner(user_id)
       result = DatabaseConnection.connect_to_db.exec_params(
         "SELECT * from bookings WHERE confirmed AND accommodation_id IN 
         (SELECT id from accommodations WHERE owner_id = $1);", [user_id])
-      result.map{ 
-        |owner_request| 
-        Booking.new(
-          owner_request['id'], owner_request['visitor_id'], owner_request['accommodation_id'], 
-          owner_request['total_cost'], owner_request['date'], owner_request['confirmed'])}
+        
+      map_records_to_array_of_booking_objects(result)
     end
 
     def all_requests_for_visitor(user_id)
       result = DatabaseConnection.connect_to_db.exec_params(
         "SELECT * FROM bookings WHERE NOT confirmed AND visitor_id = $1;", [user_id])
-      result.map{ 
-        |visitor_request| 
-        Booking.new(
-          visitor_request['id'], visitor_request['visitor_id'], visitor_request['accommodation_id'], 
-          visitor_request['total_cost'], visitor_request['date'], visitor_request['confirmed'])}
+      
+      map_records_to_array_of_booking_objects(result)
     end
 
     def all_confirmed_for_visitor(user_id)
-      bookings = []
       result = DatabaseConnection.connect_to_db.exec_params(
         "SELECT * from bookings WHERE confirmed AND visitor_id = $1;", [user_id])
 
-      result.each do |r|
-        bookings << Booking.new(
-          r['id'], r['visitor_id'], r['accommodation_id'], r['total_cost'], r['date'], r['confirmed']
-        )
-      end
-      bookings
+      map_records_to_array_of_booking_objects(result)
     end
 
     def create(visitor_id, accommodation_id, total_cost, date)
       result = DatabaseConnection.connect_to_db.exec_params(
         "INSERT INTO bookings(visitor_id, accommodation_id, confirmed, total_cost, date) VALUES ($1, $2, $3, $4, $5) RETURNING *;", 
 [visitor_id, accommodation_id, false, total_cost, date])
-      Booking.new(
-        result[0]['id'], result[0]['visitor_id'], result[0]['accommodation_id'], result[0]['total_cost'], result[0]['date'], result[0]['confirmed']
-      )
+        map_single_record_to_booking_object(result)
     end
 
     def confirm_booking_when_request_accepted(booking_id)
       result = DatabaseConnection.connect_to_db.exec_params(
         "UPDATE bookings SET confirmed = $1 WHERE id = $2 RETURNING *;", [true, booking_id])
-      Booking.new(
-        result[0]['id'], result[0]['visitor_id'], result[0]['accommodation_id'], result[0]['total_cost'], result[0]['date'], result[0]['confirmed']
-      )
+      
+      map_single_record_to_booking_object(result)
     end
 
     def delete_booking_when_request_denied(booking_id)
+      result = DatabaseConnection.connect_to_db.exec_params(
+        "DELETE FROM bookings WHERE id = $1;", [booking_id])
+    end
+
+    private
+
+    def map_single_record_to_booking_object(record)
+      Booking.new(
+        record[0]['id'], record[0]['visitor_id'], record[0]['accommodation_id'], 
+        record[0]['total_cost'], record[0]['date'], record[0]['confirmed']
+      )
+    end
+
+    def map_records_to_array_of_booking_objects(records)
+      records.map{ |record| 
+        Booking.new(record['id'], record['visitor_id'], 
+          record['accommodation_id'], record['total_cost'], record['date'], record['confirmed']) }
     end
   end
 end
