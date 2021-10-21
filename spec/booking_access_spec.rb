@@ -49,7 +49,7 @@ describe BookingAccess do
     end
 
     it 'should only return confirmed booking requests made by the user passed into the method' do
-      # A new booking made that should not be returned by the user calling the method, not confirmed
+      # A new booking made that should not be returned by the method, not confirmed
       BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-29")
 
       BookingAccess.confirm_booking_when_request_accepted(booking.booking_id)

@@ -16,8 +16,16 @@ class BookingAccess
     end
 
     def all_confirmed_for_visitor(user_id)
-      # something like:
-      # SELECT * from bookings WHERE confirmed = true AND visitor_id = #{user_id})
+      bookings = []
+      result = DatabaseConnection.connect_to_db.exec_params(
+        "SELECT * from bookings WHERE confirmed = $1 AND visitor_id = $2;", ['true', user_id])
+
+      result.each do |r|
+        bookings << Booking.new(
+          r['id'], r['visitor_id'], r['accommodation_id'], r['total_cost'], r['date'], r['confirmed']
+        )
+      end
+      bookings
     end
 
     def create(visitor_id, accommodation_id, total_cost, date)
