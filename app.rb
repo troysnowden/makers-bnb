@@ -74,4 +74,8 @@ class MakersBnb < Sinatra::Base
     # add a booking to db
   end
 
+  get "/view-bookings" do
+    erb :view_bookings
+  end
+
 end
