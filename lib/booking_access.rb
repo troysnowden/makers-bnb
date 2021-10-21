@@ -3,6 +3,14 @@ class BookingAccess
     def all_requests_for_accommodation_owner(user_id)
       # something like:
       # SELECT * from bookings WHERE confirmed = false AND accomodation_id IN (SELECT id from accommodations WHERE owner_id = #{user_id})
+      result = DatabaseConnection.connect_to_db.exec_params(
+        "SELECT * FROM bookings WHERE confirmed = 'false' AND accommodation_id IN
+        (SELECT id from accommodations WHERE owner_id = $1);",[user_id])
+      
+      result.map{ |booking_request| 
+      Booking.new(booking_request['id'], booking_request['visitor_id'], 
+      booking_request['accommodation_id'], booking_request['total_cost'],booking_request['date'], booking_request['confirmed']) }
+        
     end
 
     def all_confirmed_for_accommodation_owner(user_id)
