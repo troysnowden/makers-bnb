@@ -20,6 +20,10 @@ class BookingAccess
       # SELECT * from bookings WHERE confirmed = true AND visitor_id = #{user_id})
     end
 
+    def create(booking)
+      
+    end
+
     def confirm_booking_when_request_accepted(booking_id)
     end
 

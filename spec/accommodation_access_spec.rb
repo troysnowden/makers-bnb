@@ -7,7 +7,6 @@ describe AccommodationAccess do
   let(:accommodation) { double :accommodation }
   let(:new_user) { UserAccess.register("John", "Smith") }
   let(:not_our_user) { UserAccess.register("John", "Doe") }
-  let(:user) { double :user }
 
   describe '#all_owned_by_user' do
     it 'should return an empty array when user has no created accommodations' do
@@ -15,11 +14,7 @@ describe AccommodationAccess do
     end
 
     it 'should return an array with one accommodation object when user has one created accommodation' do
-      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
-      allow(accommodation).to receive(:name). and_return("My accommodation")
-      allow(accommodation).to receive(:description). and_return("Brief description")
-      allow(accommodation).to receive(:price_per_night). and_return(30)
-      AccommodationAccess.create(user, accommodation)
+      AccommodationAccess.create(new_user, "My accommodation", "Brief description", 30)
       
       accommodations = AccommodationAccess.all_owned_by_user(new_user)
       expect(accommodations.length).to eq(1)
@@ -30,16 +25,10 @@ describe AccommodationAccess do
 
     it 'should not return any accommodations not owned by user' do
       # Accommodation that should not be returned by this method
-      allow(accommodation).to receive(:owner_id). and_return(not_our_user.user_id)
-      allow(accommodation).to receive(:name). and_return("Not My accommodation")
-      allow(accommodation).to receive(:description). and_return("Brief description")
-      allow(accommodation).to receive(:price_per_night). and_return(30)
-      AccommodationAccess.create(user, accommodation)
+      AccommodationAccess.create(not_our_user, "Not My accommodation", "Brief description", 30)
 
       # Accommodation that should be returned by this method
-      allow(accommodation).to receive(:name). and_return("My accommodation")
-      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
-      AccommodationAccess.create(new_user, accommodation)
+      AccommodationAccess.create(new_user, "My accommodation", "Brief description", 30)
       
       accommodations = AccommodationAccess.all_owned_by_user(new_user)
       expect(accommodations.length).to eq(1)
@@ -52,17 +41,10 @@ describe AccommodationAccess do
   describe '#all_available_within_max_price_on_date' do
     it 'should return only accommodation below the given max price' do
       # Accommodation that should not be returned by this method
-      allow(accommodation).to receive(:owner_id). and_return(not_our_user.user_id)
-      allow(accommodation).to receive(:name). and_return("Not valid accommodation")
-      allow(accommodation).to receive(:description). and_return("Brief description")
-      allow(accommodation).to receive(:price_per_night). and_return(70)
-      AccommodationAccess.create(user, accommodation)
+      AccommodationAccess.create(not_our_user, "Not valid accommodation", "Brief description", 70)
 
       # Accommodation that should be returned by this method
-      allow(accommodation).to receive(:name). and_return("Valid accommodation")
-      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
-      allow(accommodation).to receive(:price_per_night). and_return(60)
-      AccommodationAccess.create(new_user, accommodation)
+      AccommodationAccess.create(new_user, "Valid accommodation", "Brief description", 60)
 
       accommodations = AccommodationAccess.all_available_within_max_price_on_date(60, "08/09/2022")
       expect(accommodations.length).to eq(1)
@@ -74,18 +56,12 @@ describe AccommodationAccess do
     # :nocov:
     xit 'should return only accommodation available on date given' do
       # Accommodation that should not be returned by this method
-      # When bookings class built come back and create a booking for 08/09/2022
-      allow(accommodation).to receive(:owner_id). and_return(not_our_user.user_id)
-      allow(accommodation).to receive(:name). and_return("Not valid accommodation")
-      allow(accommodation).to receive(:description). and_return("Brief description")
-      allow(accommodation).to receive(:price_per_night). and_return(70)
-      AccommodationAccess.create(user, accommodation)
+      # When bookings class built come back and create a booking for this accom for 08/09/2022
+      new_accom = AccommodationAccess.create(not_our_user, "Not valid accommodation", "Brief description", 30)
+      # Booking.create() and pass in new_accom.id
 
       # Accommodation that should be returned by this method
-      allow(accommodation).to receive(:name). and_return("Valid accommodation")
-      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
-      allow(accommodation).to receive(:price_per_night). and_return(30)
-      AccommodationAccess.create(new_user, accommodation)
+      AccommodationAccess.create(new_user, "Valid accommodation", "Brief description", 30)
 
       accommodations = AccommodationAccess.all_available_within_max_price_on_date(60, "08/09/2022")
       expect(accommodations.length).to eq(1)
@@ -98,12 +74,14 @@ describe AccommodationAccess do
 
   describe '#create' do
     it 'should add a new accommodation to the accommodations table' do
-      p new_user.user_id
-      allow(accommodation).to receive(:owner_id). and_return(new_user.user_id)
-      allow(accommodation).to receive(:name). and_return("My accommodation")
-      allow(accommodation).to receive(:description). and_return("Brief description")
-      allow(accommodation).to receive(:price_per_night). and_return(30)
-      expect{AccommodationAccess.create(user, accommodation)}.to change{AccommodationAccess.all_available_within_max_price_on_date(60, "08/09/2022").length}.by(1)
+      expect{
+        AccommodationAccess.create(new_user, "My accommodation", "Brief description", 30)
+      }.to change{AccommodationAccess.all_available_within_max_price_on_date(60, "08/09/2022").length}.by(1)
+      created_accommodation = AccommodationAccess.create(new_user, "My accommodation", "Brief description", 30)
+      expect(created_accommodation.class).to eq(Accommodation)
+      expect(created_accommodation.name).to eq "My accommodation"
+      expect(created_accommodation.description).to eq "Brief description"
+      expect(created_accommodation.price_per_night).to eq('30.00')
     end
   end
 end
