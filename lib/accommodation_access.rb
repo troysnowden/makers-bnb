@@ -15,9 +15,6 @@ class AccommodationAccess
 
     def all_available_within_max_price_on_date(max_price, chosen_date)
       accommodation_array = []
-      # get all accommodations from database within max price
-      # loop through each accommodation found and check whether there is a booking for chosen date, and filter out if so
-      # return an array of accommodation objects
       result = DatabaseConnection.connect_to_db.exec_params(
         "SELECT * from accommodations WHERE price_per_night <= $1 AND $2 NOT IN (SELECT date FROM bookings);", [max_price, chosen_date])
 
