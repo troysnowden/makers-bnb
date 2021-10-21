@@ -30,6 +30,7 @@ class BookingAccess
     end
 
     def confirm_booking_when_request_accepted(booking_id)
+      
     end
 
     def delete_booking_when_request_denied(booking_id)

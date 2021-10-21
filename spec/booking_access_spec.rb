@@ -6,7 +6,9 @@ require 'user'
 describe BookingAccess do
 
   let(:user) { UserAccess.register('John', 'Smith')}
+  let(:not_our_user) { UserAccess.register("John", "Doe") }
   let(:accommodation) { AccommodationAccess.create(user, "My accommodation", "Brief description", 30) }
+  let(:booking) { BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-19") }
   
   describe '#all_requests_for_accommodation_owner' do
     
@@ -17,21 +19,53 @@ describe BookingAccess do
   end
 
   describe '#all_requests_for_visitor' do
-    
+    it 'should only return booking requests made by the user passed into the method' do
+      # A booking made that should not be returned by the user calling the method
+      BookingAccess.create(not_our_user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-29")
+
+      user_booking_requests = BookingAccess.all_requests_for_visitor(user.user_id)
+      expect(user_booking_requests.length).to eq(1)
+      expect(user_booking_requests[0].visitor_id).to eq user.user_id
+      expect(user_booking_requests[0].accommodation_id).to eq accommodation.accommodation_id
+      expect(user_booking_requests[0].total_cost).to eq accommodation.price_per_night
+      expect(user_booking_requests[0].date).to eq "2022-08-19"
+    end
   end
 
   describe '#all_confirmed_for_visitor' do
-    
+    it 'should only return booking requests made by the user passed into the method' do
+      # A booking made that should not be returned by the user calling the method
+      BookingAccess.create(not_our_user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-29")
+
+      user_booking_requests = BookingAccess.all_confirmed_for_visitor(user.user_id)
+      expect(user_booking_requests.length).to eq(1)
+      expect(user_booking_requests[0].visitor_id).to eq user.user_id
+      expect(user_booking_requests[0].accommodation_id).to eq accommodation.accommodation_id
+      expect(user_booking_requests[0].total_cost).to eq accommodation.price_per_night
+      expect(user_booking_requests[0].date).to eq "2022-08-19"
+    end
+
+    it 'should only return confirmed booking requests made by the user passed into the method' do
+      # A booking made that should not be returned by the user calling the method
+      BookingAccess.create(not_our_user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-29")
+
+      user_booking_requests = BookingAccess.all_requests_for_visitor(user.user_id)
+      expect(user_booking_requests.length).to eq(1)
+      expect(user_booking_requests[0].visitor_id).to eq user.user_id
+      expect(user_booking_requests[0].accommodation_id).to eq accommodation.accommodation_id
+      expect(user_booking_requests[0].total_cost).to eq accommodation.price_per_night
+      expect(user_booking_requests[0].date).to eq "2022-08-19"
+    end
   end
 
   describe '#create' do
     it 'should create a booking request for visitor' do
-      new_booking = BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "18/09/2022")
-      expect(new_booking.class).to eq Booking
-      expect(new_booking.accommodation_id).to eq accommodation.accommodation_id
-      expect(new_booking.visitor_id).to eq user.user_id
-      expect(new_booking.total_cost).to eq accommodation.price_per_night
-      expect(new_booking.date).to eq "2022-08-09"
+      BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-19")
+      expect(booking.class).to eq Booking
+      expect(booking.accommodation_id).to eq accommodation.accommodation_id
+      expect(booking.visitor_id).to eq user.user_id
+      expect(booking.total_cost).to eq accommodation.price_per_night
+      expect(booking.date).to eq "2022-08-19"
     end
   end
 
