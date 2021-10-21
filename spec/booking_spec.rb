@@ -32,40 +32,18 @@ describe Booking do
     end
   end
 
-  # describe '.all' do
-  #   it 'returns a list of available accommodation' do
-      # describe '.all' do
-      #   it 'returns a list of bookings' do
-          # connection = PG.connect(dbname: 'mbnb_test')
-    
-          # booking = Bookbookings.create(url: "http://www.makersacademy.com", title: "Makers Academy")
-          # Bookbookings.create(url: "http://www.destroyallsoftware.com", title: "Destroy All Software")
-          # Bookbookings.create(url: "http://www.google.com", title: "Google")
-       
-          # bookings = Bookbookings.all
-       
-          # expect(bookings.length).to eq 3
-          # expect(bookings.first).to be_a Bookbookings
-          # expect(bookings.first.id).to eq booking.id
-          # expect(bookings.first.title).to eq 'Makers Academy'
-          # expect(bookings.first.url).to eq 'http://www.makersacademy.com'
-  #       end
-  #   end
+  # describe '.create' do
+  #   it 'creates a new booking' do
+  #     booking = Booking.create(visitor_id: '123456', accommodation_id: '654321', booked_date: '2021-10-21', total_cost: 80)
+  #     persisted_data = persisted_data(id: booking.id)
+
+  #     expect(booking).to be_a Booking
+  #     expect(booking.id).to eq persisted_data['id']
+  #     expect(booking.visitor_id).to eq '123456'
+  #     expect(booking.accommodation_id).to eq '654321'
+  #     expect(booking.confirmed).to eq True
+  #     expect(booking.total_cost).to eq 80
   #   end
   # end
-
-  describe '.create' do
-    it 'creates a new booking' do
-      booking = Booking.create(visitor_id: '123456', accommodation_id: '654321', booked_date: '2021-10-21', total_cost: 80)
-      persisted_data = persisted_data(id: booking.id)
-
-      expect(booking).to be_a Booking
-      expect(booking.id).to eq persisted_data['id']
-      expect(booking.visitor_id).to eq '123456'
-      expect(booking.accommodation_id).to eq '654321'
-      expect(booking.confirmed).to eq True
-      expect(booking.total_cost).to eq 80
-    end
-  end
 
 end

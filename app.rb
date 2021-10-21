@@ -59,7 +59,7 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/book-accommodation" do
-    erb :book_accommodation
+    # add a booking to db
   end
 
 end
