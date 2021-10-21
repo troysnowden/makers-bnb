@@ -67,6 +67,11 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/book-accommodation" do
+    @test_accoms = [
+      {:name => "Sunny Sands", :description => "coarse and rough", :price => "80"},
+      {:name => "Coastal Chalet", :description => "nice pillows", :price => "1000"},
+      {:name => "Riviera Retreat", :description => "great apart from the smell", :price => "300"}
+    ]
     erb :book_accommodation
   end
 
