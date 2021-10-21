@@ -67,16 +67,22 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/book-accommodation" do
-    @test_accoms = [
-      {:name => "Sunny Sands", :description => "coarse and rough", :price => "80"},
-      {:name => "Coastal Chalet", :description => "nice pillows", :price => "1000"},
-      {:name => "Riviera Retreat", :description => "great apart from the smell", :price => "300"}
+    # this will be replaced with db call 
+    $test_accoms = [
+      {:name => "Sunny Sands", :description => "coarse and rough", :price => "80", :id => 1},
+      {:name => "Coastal Chalet", :description => "nice pillows", :price => "1000", :id => 2},
+      {:name => "Riviera Retreat", :description => "great apart from the smell", :price => "300", :id => 3}
     ]
+    @test_accoms = $test_accoms
     erb :book_accommodation
   end
 
   post "/book-accommodation" do
-    # add a booking to db
+    session[:selected_booking] = $test_accoms.select { |key, value| 
+       key[:id].to_i == params[:id].to_i
+    }[0]
+
+    redirect "/"
   end
 
 end
