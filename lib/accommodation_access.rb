@@ -1,9 +1,8 @@
 require 'accommodation'
+require 'database_connection'
 
 class AccommodationAccess
   class << self
-
-   
 
     def all_owned_by_user(user) # pass in user or user_id?
       # get all accommodations where owner_id = user.user_id
@@ -15,8 +14,12 @@ class AccommodationAccess
 
     def all_available_within_max_price_on_date(max_price, chosen_date)
       accommodation_array = []
+      result = DatabaseConnection.connect_to_db.exec_params("SELECT * from accommodations WHERE '#{chosen_date}' IN (SELECT date FROM bookings WHERE date = '#{chosen_date}');")
+      p result.ntuples
+      result.each{|r| p r}
       result = DatabaseConnection.connect_to_db.exec_params(
-        "SELECT * from accommodations WHERE price_per_night <= $1 AND $2 NOT IN (SELECT date FROM bookings);", [max_price, chosen_date])
+        "SELECT * from accommodations WHERE price_per_night <= $1;",
+         [max_price])
 
       result.each do |r|
         accommodation_array << Accommodation.new(r['id'], r['owner_id'], r['name'], r['description'], r['price_per_night'])

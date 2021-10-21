@@ -1,14 +1,22 @@
+require 'booking'
+
 class BookingAccess
   class << self
     def all_requests_for_accommodation_owner(user_id)
-      # something like:
-      # SELECT * from bookings WHERE confirmed = false AND accomodation_id IN (SELECT id from accommodations WHERE owner_id = #{user_id})
+      result = DatabaseConnection.connect_to_db.exec_params(
+        "SELECT * FROM bookings WHERE NOT confirmed AND accommodation_id IN
+        (SELECT id from accommodations WHERE owner_id = $1);",[user_id])
+      
+      result.map{ |booking_request| 
+      Booking.new(booking_request['id'], booking_request['visitor_id'], 
+      booking_request['accommodation_id'], booking_request['total_cost'],booking_request['date'], booking_request['confirmed']) }
+        
     end
 
     def all_confirmed_for_accommodation_owner(user_id)
       result = DatabaseConnection.connect_to_db.exec_params(
-        "SELECT * from bookings WHERE confirmed = 'true' AND accomodation_id IN (SELECT id from accommodations WHERE owner_id = $1",
-         [user_id])
+        "SELECT * from bookings WHERE confirmed AND accommodation_id IN 
+        (SELECT id from accommodations WHERE owner_id = $1);", [user_id])
       result.map{ 
         |owner_request| 
         Booking.new(
@@ -18,7 +26,7 @@ class BookingAccess
 
     def all_requests_for_visitor(user_id)
       result = DatabaseConnection.connect_to_db.exec_params(
-        "SELECT * FROM bookings WHERE confirmed = 'false' AND visitor_id = $1;", [user_id])
+        "SELECT * FROM bookings WHERE NOT confirmed AND visitor_id = $1;", [user_id])
       result.map{ 
         |visitor_request| 
         Booking.new(
@@ -29,7 +37,7 @@ class BookingAccess
     def all_confirmed_for_visitor(user_id)
       bookings = []
       result = DatabaseConnection.connect_to_db.exec_params(
-        "SELECT * from bookings WHERE confirmed = $1 AND visitor_id = $2;", ['true', user_id])
+        "SELECT * from bookings WHERE confirmed AND visitor_id = $1;", [user_id])
 
       result.each do |r|
         bookings << Booking.new(

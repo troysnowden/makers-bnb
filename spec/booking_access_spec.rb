@@ -15,10 +15,12 @@ describe BookingAccess do
   describe '#all_requests_for_accommodation_owner' do
     it 'should only return requests made to accommodation owned by user' do
       # Booking that should be returned by method, as made for accommodation that user owns
-      BookingAccess.create(not_our_user.user_id, accommodation_user_owns.accommodation_id, accommodation_user_owns.price_per_night, "2022-08-29")
+      BookingAccess.create(not_our_user.user_id, accommodation_user_owns.accommodation_id, 
+      accommodation_user_owns.price_per_night, "2022-08-29")
       
       # Booking that should not be returned by method, as booking has been confirmed
-      booking_to_confirm = BookingAccess.create(not_our_user.user_id, accommodation_user_owns.accommodation_id, accommodation_user_owns.price_per_night, "2022-08-29")
+      booking_to_confirm = BookingAccess.create(not_our_user.user_id, 
+      accommodation_user_owns.accommodation_id, accommodation_user_owns.price_per_night, "2022-08-29")
       BookingAccess.confirm_booking_when_request_accepted(booking_to_confirm.booking_id)
       
       # Booking that should not be returned by method, as not made for accommodation that user owns
@@ -29,8 +31,9 @@ describe BookingAccess do
       expect(user_booking_requests[0].visitor_id).to eq not_our_user.user_id
       expect(user_booking_requests[0].accommodation_id).to eq accommodation_user_owns.accommodation_id
       expect(user_booking_requests[0].total_cost).to eq accommodation_user_owns.price_per_night
-      expect(user_booking_requests[0].date).to eq "2022-08-19"
+      expect(user_booking_requests[0].date).to eq "2022-08-29"
     end
+    
   end
 
   describe '#all_confirmed_for_accommodation_owner' do
@@ -48,14 +51,15 @@ describe BookingAccess do
 
       # Booking that should not be returned by method, as not confirmed even though made for accommodation that user owns
       BookingAccess.create(not_our_user.user_id, accommodation_user_owns.accommodation_id, accommodation_user_owns.price_per_night, "2022-08-19")
+      
 
 
-      user_booking_requests = BookingAccess.all_requests_for_accommodation_owner(user.user_id)
+      user_booking_requests = BookingAccess.all_confirmed_for_accommodation_owner(user.user_id)
       expect(user_booking_requests.length).to eq(1)
       expect(user_booking_requests[0].visitor_id).to eq not_our_user.user_id
       expect(user_booking_requests[0].accommodation_id).to eq accommodation_user_owns.accommodation_id
       expect(user_booking_requests[0].total_cost).to eq accommodation_user_owns.price_per_night
-      expect(user_booking_requests[0].date).to eq "2022-08-19"
+      expect(user_booking_requests[0].date).to eq "2022-08-29"
     end
   end
 
