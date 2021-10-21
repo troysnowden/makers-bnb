@@ -1,6 +1,7 @@
 require 'booking_access'
 require 'booking'
 require 'accommodation'
+require 'accommodation_access'
 require 'user'
 
 describe BookingAccess do
@@ -22,6 +23,8 @@ describe BookingAccess do
     it 'should only return booking requests made by the user passed into the method' do
       # A booking made that should not be returned by the user calling the method
       BookingAccess.create(not_our_user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-29")
+      
+      BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-19")
 
       user_booking_requests = BookingAccess.all_requests_for_visitor(user.user_id)
       expect(user_booking_requests.length).to eq(1)
