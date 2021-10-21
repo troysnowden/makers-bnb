@@ -20,8 +20,13 @@ class BookingAccess
       # SELECT * from bookings WHERE confirmed = true AND visitor_id = #{user_id})
     end
 
-    def create(booking)
-      
+    def create(visitor_id, accommodation_id, total_cost, date)
+      result = DatabaseConnection.connect_to_db.exec_params(
+        "INSERT INTO bookings(visitor_id, accommodation_id, confirmed, total_cost, date) VALUES ($1, $2, $3, $4, $5) RETURNING *;", 
+[visitor_id, accommodation_id, false, total_cost, date])
+      Booking.new(
+        result[0]['id'], result[0]['visitor_id'], result[0]['accommodation_id'], result[0]['total_cost'], result[0]['date']
+      )
     end
 
     def confirm_booking_when_request_accepted(booking_id)

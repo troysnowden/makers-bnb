@@ -6,8 +6,7 @@ require 'user'
 describe BookingAccess do
 
   let(:user) { UserAccess.register('John', 'Smith')}
-  let(:accommodation) { AccommodationAccess.create(Accommodation.new())}
-  let(:booking) {Booking.new(accommodation.id, user.user_id, accommodation.price_per_night, "08/09/2022")}
+  let(:accommodation) { AccommodationAccess.create(user, "My accommodation", "Brief description", 30) }
   
   describe '#all_requests_for_accommodation_owner' do
     
@@ -27,7 +26,12 @@ describe BookingAccess do
 
   describe '#create' do
     it 'should create a booking request for visitor' do
-      expect(BookingAccess.create(booking)).to eq nil
+      new_booking = BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "18/09/2022")
+      expect(new_booking.class).to eq Booking
+      expect(new_booking.accommodation_id).to eq accommodation.accommodation_id
+      expect(new_booking.visitor_id).to eq user.user_id
+      expect(new_booking.total_cost).to eq accommodation.price_per_night
+      expect(new_booking.date).to eq "2022-08-09"
     end
   end
 

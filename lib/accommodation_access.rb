@@ -23,7 +23,7 @@ class AccommodationAccess
     def create(user, name, description, price_per_night)
       # insert accommodation into accommodations table
       result = DatabaseConnection.connect_to_db.exec_params(
-        "INSERT INTO accommodations(owner_id, name, description, price_per_night) VALUES ($1, $2, $3, $4) RETURNING id, owner_id, name, description, price_per_night;", 
+        "INSERT INTO accommodations(owner_id, name, description, price_per_night) VALUES ($1, $2, $3, $4) RETURNING *;", 
 [user.user_id, name, description, price_per_night])
       Accommodation.new(
         result[0]['id'], result[0]['owner_id'], result[0]['name'], result[0]['description'], result[0]['price_per_night']
