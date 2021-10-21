@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'booking'
 
 describe Booking do
@@ -33,4 +31,5 @@ describe Booking do
       }.from(false).to(true)
     end
   end
+
 end
