@@ -24,7 +24,7 @@
               <input type="hidden" id="description" name="description" value=<%= accom[:description] %>>
               <input type="hidden" id="price" name="price" value=<%= accom[:price] %>>
               <input type="hidden" id="id" name="id" value=<%= accom[:id] %>>
-              <input  type="submit" value="Book">
+              <input type="submit" id="submit-booking-<%=accom[:id]%>" value="Book <%=accom[:name]%>">
             </form>
         </div>
       </div>
