@@ -8,8 +8,8 @@ describe BookingAccess do
 
   let(:user) { UserAccess.register('John', 'Smith')}
   let(:not_our_user) { UserAccess.register("John", "Doe") }
-  let(:accommodation) { AccommodationAccess.create(not_our_user, "My accommodation", "Brief description", 30) }
-  let(:accommodation_user_owns) { AccommodationAccess.create(user, "User's accommodation", "Brief description", 50) }
+  let(:accommodation) { AccommodationAccess.create(not_our_user.user_id, "My accommodation", "Brief description", 30) }
+  let(:accommodation_user_owns) { AccommodationAccess.create(user.user_id, "User's accommodation", "Brief description", 50) }
   let(:booking) { BookingAccess.create(user.user_id, accommodation.accommodation_id, accommodation.price_per_night, "2022-08-19") }
   
   describe '#all_requests_for_accommodation_owner' do
