@@ -1,16 +1,12 @@
 class Booking
+  attr_reader :booking_id, :accommodation_id, :visitor_id, :total_cost, :date, :confirmed
 
-  attr_reader :accommodation_id, :visitor_id, :total_cost, :date, :confirmed
-
-  def initialize(visitor_id, accommodation_id, date, total_cost)
+  def initialize(booking_id, visitor_id, accom_id, total_cost, date, confirmed)
+    @booking_id = booking_id
     @visitor_id = visitor_id
-    @accommodation_id = accommodation_id
+    @accommodation_id = accom_id
     @total_cost = total_cost
     @date = date
-    @confirmed = false
-  end
-
-  def confirm
-    @confirmed = true
+    @confirmed = confirmed == 'f' ? false : true
   end
 end
