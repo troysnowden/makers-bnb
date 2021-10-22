@@ -63,8 +63,6 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/respond-to-booking" do
-    p params
-    # change to view booking
     if params[:confirm_booking] == "Confirm"
       BookingAccess.confirm_booking_when_request_accepted(params[:booking_id])
     else
@@ -86,9 +84,9 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/book-accommodation" do
+    redirect "/" if session[:user].nil?
     @current_chosen_date = session[:current_chosen_date].nil? ? "2021-10-25" : session[:current_chosen_date]
     @current_chosen_max_price = session[:current_chosen_max_price].nil? ? 999 : session[:current_chosen_max_price]
-    redirect "/" if session[:user].nil?
     @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(
       @current_chosen_max_price, @current_chosen_date)
     erb :book_accommodation
@@ -99,13 +97,12 @@ class MakersBnb < Sinatra::Base
       250, session[:current_chosen_date]).select { |key, value| 
        key.accommodation_id.to_i == params[:id].to_i
     }[0]
-
-    # actually redirect to the confirm booking screen
     
     redirect "/confirm-booking"
   end
 
   get "/confirm-booking" do
+    redirect "/" if session[:user].nil?
     @accom = session[:selected_booking]
     erb(:confirm_booking)
   end
@@ -116,7 +113,7 @@ class MakersBnb < Sinatra::Base
       session[:selected_booking].accommodation_id,
       session[:selected_booking].price_per_night,
       # hardcoded for now
-      "2021-10-23"
+      session[:current_chosen_date]
     )
 
     redirect "/"
@@ -124,6 +121,7 @@ class MakersBnb < Sinatra::Base
 
 
   get "/view-bookings" do
+    redirect "/" if session[:user].nil?
 
     # hash with accommodation name as key and booking as value
     @booking_requests_visitor_hash = {}
@@ -136,7 +134,6 @@ class MakersBnb < Sinatra::Base
     BookingAccess.all_confirmed_for_visitor(session[:user].user_id).each do |request|
       @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
-
     
     erb :view_bookings
   end
