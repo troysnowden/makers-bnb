@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require './lib/user_access'
 require './lib/accommodation_access'
+require './lib/booking_access'
 require './lib/accommodation'
 require './lib/booking_access'
 
@@ -18,10 +19,7 @@ class MakersBnb < Sinatra::Base
 
   get "/" do # index page
     @user = session[:user] unless session[:user].nil?
-    # if user.logged_in?
     erb (:index)
-    # else
-    # erb(:homepage)
   end
 
   get "/register" do
@@ -44,38 +42,30 @@ class MakersBnb < Sinatra::Base
     redirect "/"
   end
 
-  get "/login" do
-    erb(:login)
-  end
-
-  post "/login" do
-    redirect "test-homepage"
-    # sets logged in to true
-  end
-
   get "/manage-accommodation" do
-    user_id = session[:user].user_id
-    @accommodation_list = AccommodationAccess.all_owned_by_user(user_id)
+    redirect "/" if session[:user].nil?
+    @user_accommodations = AccommodationAccess.all_owned_by_user(session[:user].user_id)
     erb (:manage_accommodation)
   end
 
-  post "/manage-accommodation" do
-    # add accommodation to db
-    redirect "/manage-accommodation"
-  end
+  # not sure what this route is for so not deleting it yet incase someone is using it
+  # post "/manage-accommodation" do
+  #   redirect "/manage-accommodation"
+  # end
 
   get "/add-accommodation" do
+    redirect "/" if session[:user].nil?
     erb :add_accommodation
   end
 
   post "/add-accommodation" do
     user_id = session[:user].user_id
-    new_accomodation = Accommodation.create(user_id, params[:name], params[:description], params[:price_per_night])
+    new_accomodation = AccommodationAccess.create(session[:user].user_id, params[:name], params[:description], params[:price_per_night])
     redirect "/manage-accommodation"
   end
 
   get "/book-accommodation" do
-    # this will be replaced with db call 
+    redirect "/" if session[:user].nil?
     @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
     erb :book_accommodation
   end
@@ -87,6 +77,23 @@ class MakersBnb < Sinatra::Base
 
     # actually redirect to the confirm booking screen
     
+    redirect "/confirm-booking"
+  end
+
+  get "/confirm-booking" do
+    @accom = session[:selected_booking]
+    erb(:confirm_booking)
+  end
+
+  post "/confirm-booking" do
+    confirmed_booking = BookingAccess.create(
+      session[:user].user_id,
+      session[:selected_booking].accommodation_id,
+      session[:selected_booking].price_per_night,
+      # hardcoded for now
+      "2021-10-23"
+    )
+
     redirect "/"
   end
 
