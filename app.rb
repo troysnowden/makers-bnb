@@ -3,6 +3,7 @@ require 'sinatra/reloader' if development?
 require './lib/user_access'
 require './lib/accommodation_access'
 require './lib/accommodation'
+require './lib/booking_access'
 
 
 class MakersBnb < Sinatra::Base
@@ -91,9 +92,17 @@ class MakersBnb < Sinatra::Base
 
   get "/view-bookings" do
     user_id = session[:user].user_id
-    @request_list = all_requests_for_visitor(user_id)
-    @confirmed_list = all_confirmed_for_visitor(user_id)
-    @accommodation_id = 
+    @request_list = BookingAccess.all_requests_for_visitor(user_id)
+    @request_list.each do |accom|
+      requested_accommodations << AccommodationAccess.filter_by_accom_id(accom.id)
+      p "XYZ"
+      p requested_accommodations
+    end
+
+
+    # @confirmed_list = all_confirmed_for_visitor(user_id)
+
+    
     erb :view_bookings
   end
 
