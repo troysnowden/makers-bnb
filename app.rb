@@ -4,6 +4,7 @@ require './lib/user_access'
 require './lib/accommodation_access'
 require './lib/booking_access'
 require './lib/accommodation'
+require './lib/booking_access'
 
 
 class MakersBnb < Sinatra::Base
@@ -43,14 +44,35 @@ class MakersBnb < Sinatra::Base
 
   get "/manage-accommodation" do
     redirect "/" if session[:user].nil?
+
     @user_accommodations = AccommodationAccess.all_owned_by_user(session[:user].user_id)
+
+    # hash with accommodation name as key and booking as value
+    @booking_requests_owner_hash = {}
+    BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id).each do |request|
+      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
+
+    # hash with accommodation name as key and booking as value
+    @confirmed_bookings_owner_hash = {}
+    BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id).each do |request|
+      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
+
     erb (:manage_accommodation)
   end
 
-  # not sure what this route is for so not deleting it yet incase someone is using it
-  # post "/manage-accommodation" do
-  #   redirect "/manage-accommodation"
-  # end
+  post "/respond-to-booking" do
+    p params
+    # change to view booking
+    if params[:confirm_booking] == "Confirm"
+      BookingAccess.confirm_booking_when_request_accepted(params[:booking_id])
+    else
+      BookingAccess.delete_booking_when_request_denied(params[:booking_id])
+    end
+
+    redirect "/manage-accommodation"
+  end
 
   get "/add-accommodation" do
     redirect "/" if session[:user].nil?
@@ -96,7 +118,31 @@ class MakersBnb < Sinatra::Base
     redirect "/"
   end
 
+
   get "/view-bookings" do
+    # user_id = session[:user].user_id
+    # @request_list = BookingAccess.all_requests_for_visitor(user_id)
+    # @requested_accommodations = []
+    # @request_list.each do |accom|
+    #   @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
+    #   p "XYZ"
+    #   p @requested_accommodations
+    #   p @request_list
+    # end
+
+    # hash with accommodation name as key and booking as value
+    @booking_requests_visitor_hash = {}
+    BookingAccess.all_requests_for_visitor(session[:user].user_id).each do |request|
+      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
+
+    # hash with accommodation name as key and booking as value
+    @confirmed_bookings_visitor_hash = {}
+    BookingAccess.all_confirmed_for_visitor(session[:user].user_id).each do |request|
+      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
+
+    
     erb :view_bookings
   end
 
