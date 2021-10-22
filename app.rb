@@ -50,13 +50,13 @@ class MakersBnb < Sinatra::Base
     # hash with accommodation name as key and booking as value
     @booking_requests_owner_hash = {}
     BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id).each do |request|
-      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     # hash with accommodation name as key and booking as value
     @confirmed_bookings_owner_hash = {}
     BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id).each do |request|
-      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     erb (:manage_accommodation)
@@ -128,13 +128,13 @@ class MakersBnb < Sinatra::Base
     # hash with accommodation name as key and booking as value
     @booking_requests_visitor_hash = {}
     BookingAccess.all_requests_for_visitor(session[:user].user_id).each do |request|
-      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     # hash with accommodation name as key and booking as value
     @confirmed_bookings_visitor_hash = {}
     BookingAccess.all_confirmed_for_visitor(session[:user].user_id).each do |request|
-      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     

@@ -25,19 +25,23 @@ class AccommodationAccess
       result = @@database_connection.exec_params(
         "INSERT INTO accommodations(owner_id, name, description, price_per_night) VALUES ($1, $2, $3, $4) RETURNING *;", 
 [user_id, name, description, price_per_night])
-      Accommodation.new(
-        result[0]['id'], result[0]['owner_id'], result[0]['name'], result[0]['description'], result[0]['price_per_night']
-      )
+      map_records_to_single_booking_object(result)
     end
 
     def filter_by_accom_id(accommodation_id) # pass in accommodation_id?
       # get all accommodations where accommodation_id = id
       result = @@database_connection.exec_params('SELECT * FROM accommodations WHERE id = $1;', [accommodation_id])
       
-      result.map{ |accommodation| Accommodation.new(accommodation['id'], accommodation['user_id'], accommodation['name'], accommodation['description'], accommodation['price_per_night']) }
+      map_records_to_single_booking_object(result)
     end
 
     private
+
+    def map_records_to_single_booking_object(records)
+      Accommodation.new(
+        records[0]['id'], records[0]['owner_id'], records[0]['name'], records[0]['description'], records[0]['price_per_night']
+      )
+    end
 
     def map_records_to_array_of_accommodation_objects(records)
       records.map{ |accommodation| 
