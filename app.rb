@@ -87,7 +87,7 @@ class MakersBnb < Sinatra::Base
 
   get "/book-accommodation" do
     @current_chosen_date = session[:current_chosen_date].nil? ? "2021-10-25" : session[:current_chosen_date]
-    @current_chosen_max_price = session[:current_chosen_max_price].nil? ? 99 : session[:current_chosen_max_price]
+    @current_chosen_max_price = session[:current_chosen_max_price].nil? ? 999 : session[:current_chosen_max_price]
     redirect "/" if session[:user].nil?
     @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(
       @current_chosen_max_price, @current_chosen_date)
