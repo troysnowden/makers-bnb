@@ -100,10 +100,12 @@ class MakersBnb < Sinatra::Base
   get "/view-bookings" do
     user_id = session[:user].user_id
     @request_list = BookingAccess.all_requests_for_visitor(user_id)
+    @requested_accommodations = []
     @request_list.each do |accom|
-      requested_accommodations << AccommodationAccess.filter_by_accom_id(accom.id)
+      @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
       p "XYZ"
-      p requested_accommodations
+      p @requested_accommodations
+      p @request_list
     end
 
 
