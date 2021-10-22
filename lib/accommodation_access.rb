@@ -1,5 +1,5 @@
-require 'accommodation'
-require 'database_connection'
+require_relative 'accommodation'
+require_relative 'database_connection'
 
 class AccommodationAccess
   class << self
