@@ -58,9 +58,10 @@ feature 'Viewing manage accommodation page' do
 
     click_button "Confirm booking"
 
+    # change when view bookings page added
     expect(page).to have_current_path("/")
 
-    click_button "Manage accommodation"
+    visit('/manage-accommodation')
 
     expect(page).to have_content("My Villa")
     expect(page).to have_content("4 bedroom villa")

@@ -43,24 +43,27 @@ class MakersBnb < Sinatra::Base
 
   get "/manage-accommodation" do
     redirect "/" if session[:user].nil?
-    @user_accommodations = AccommodationAccess.all_owned_by_user(session[:user].user_id)
-    @booking_requests_owner = BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id)
-    @confirmed_booking_requests_owner = BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id)
-    @accoms_with_booking_reqs = []
 
-    @booking_requests_owner.each do |request| 
-      @user_accommodations.each do |accom| 
-        @accoms_with_booking_reqs << accom if accom.accommodation_id == request.accommodation_id 
-      end
+    @user_accommodations = AccommodationAccess.all_owned_by_user(session[:user].user_id)
+
+    # hash with accommodation name as key and booking as value
+    @booking_requests_owner_hash = {}
+    BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id).each do |request|
+      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
+
+    # hash with accommodation name as key and booking as value
+    @confirmed_bookings_owner_hash = {}
+    BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id).each do |request|
+      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
     end
 
     erb (:manage_accommodation)
   end
 
-  # not sure what this route is for so not deleting it yet incase someone is using it
-  # post "/manage-accommodation" do
-  #   redirect "/manage-accommodation"
-  # end
+  post "/respond-to-booking" do
+    
+  end
 
   get "/add-accommodation" do
     redirect "/" if session[:user].nil?
