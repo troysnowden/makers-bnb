@@ -8,6 +8,8 @@ feature 'book accommodation' do
   end
     
     scenario 'Should be able to see an accom, and book it' do
+      register_user
+      login_user
       visit '/book-accommodation'
       expect(page).to have_content('Sunny Sands')
       expect(page).to have_content('course and rough')
