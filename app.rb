@@ -62,7 +62,15 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/respond-to-booking" do
-    
+    p params
+    # change to view booking
+    if params[:confirm_booking] == "Confirm"
+      BookingAccess.confirm_booking_when_request_accepted(params[:booking_id])
+    else
+      BookingAccess.delete_booking_when_request_denied(params[:booking_id])
+    end
+
+    redirect "/manage-accommodation"
   end
 
   get "/add-accommodation" do
@@ -108,6 +116,7 @@ class MakersBnb < Sinatra::Base
 
     redirect "/"
   end
+
 
   get "/view-bookings" do
     user_id = session[:user].user_id
