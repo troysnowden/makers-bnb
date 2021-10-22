@@ -1,3 +1,7 @@
+require 'user_access'
+require 'accommodation'
+require 'booking_access'
+
 feature 'Viewing my booking' do
     # scenario 'Should be able to see a list of bookings which need approval' do
     #   new_user = UserAccess.register('troy','snowdon')
