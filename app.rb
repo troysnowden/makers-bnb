@@ -86,8 +86,11 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/book-accommodation" do
+    @current_chosen_date = session[:current_chosen_date].nil? ? "2021-10-25" : session[:current_chosen_date]
+    @current_chosen_max_price = session[:current_chosen_max_price].nil? ? 99 : session[:current_chosen_max_price]
     redirect "/" if session[:user].nil?
-    @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
+    @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(
+      @current_chosen_max_price, @current_chosen_date)
     erb :book_accommodation
   end
 
@@ -120,15 +123,6 @@ class MakersBnb < Sinatra::Base
 
 
   get "/view-bookings" do
-    # user_id = session[:user].user_id
-    # @request_list = BookingAccess.all_requests_for_visitor(user_id)
-    # @requested_accommodations = []
-    # @request_list.each do |accom|
-    #   @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
-    #   p "XYZ"
-    #   p @requested_accommodations
-    #   p @request_list
-    # end
 
     # hash with accommodation name as key and booking as value
     @booking_requests_visitor_hash = {}
@@ -144,6 +138,12 @@ class MakersBnb < Sinatra::Base
 
     
     erb :view_bookings
+  end
+
+  post "/search-specific" do
+    session[:current_chosen_date] = params[:calendar]
+    session[:current_chosen_max_price] = params[:max_price]
+    redirect "/book-accommodation"
   end
 
 end
