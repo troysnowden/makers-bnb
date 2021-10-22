@@ -27,19 +27,6 @@ class AccommodationAccess
       accommodation_array
     end
 
-    def all_available
-      accommodation_array = []
-      # get all accommodations from database within max price
-      # loop through each accommodation found and check whether there is a booking for chosen date, and filter out if so
-      # return an array of accommodation objects
-      result = DatabaseConnection.connect_to_db.exec_params("SELECT * from accommodations")
-
-      result.each do |r|
-        accommodation_array << Accommodation.new(r['id'], r['owner_id'], r['name'], r['description'], r['price_per_night'])
-      end
-      accommodation_array
-    end
-
     def create(user, name, description, price_per_night)
       # insert accommodation into accommodations table
       result = DatabaseConnection.connect_to_db.exec_params(

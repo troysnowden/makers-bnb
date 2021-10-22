@@ -69,13 +69,14 @@ class MakersBnb < Sinatra::Base
 
   get "/book-accommodation" do
     # this will be replaced with db call 
-    
-    @test_accoms = AccommodationAccess.all_available
+    p AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
+    @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
     erb :book_accommodation
   end
 
   post "/book-accommodation" do
-    session[:selected_booking] = AccommodationAccess.all_available.select { |key, value| 
+    p AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
+    session[:selected_booking] = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25").select { |key, value| 
        key.accommodation_id.to_i == params[:id].to_i
     }[0]
 
