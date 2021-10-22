@@ -1,31 +1,40 @@
+<head>
+    <link rel="stylesheet" href="/assets/booking.css">
+</head>
 <body>
 <h1>MakersBNB</h1>
 
-    <% if !@request_list %>
-        <h2>You have no bookings listed</h2><br>
+    <% unless @confirmed_bookings_visitor_hash.length.positive? %>
+        <h2>You have no confirmed bookings</h2><br>
     <% else %>
-        <% @request_list.each do |request|%>
-
-        <p><i>£<%= request.total_cost %> per night</i></p>
-        <%end%>
-
+        <h2>Your confirmed bookings</h2><br>
+         <% @confirmed_bookings_visitor_hash.each do |accom_name, booking|%>
+            <br/>
+            <div class="accom-card">
+                <div class="accom-container">
+                    <h5><%= accom_name %></h5>
+                    <p><%= booking.date%></p>
+                    <p>£<%= booking.total_cost %></p>
+                    <br>
+                </div>
+            </div>
+        <% end %>
     <% end %>
 
-
-
-
-<h3>Confirmed bookings</h3>
-
-    <h5>booking name</h5>
-    <p>Brief description</p>
-    <p>£80 per night</p>
-
-
-<h3>Bookings requested</h3>
-
-    <h5>booking name</h5>
-    <p>Brief description</p>
-    <p>£80 per night</p>
-
+    <% unless @booking_requests_visitor_hash.length.positive? %>
+        <h2>You have no booking requests</h2><br>
+    <% else %>
+        <h2>Your booking requests</h2><br>
+         <% @booking_requests_visitor_hash.each do |accom_name, booking|%>
+            <div class="accom-card">
+                <div class="accom-container">
+                    <h5><%= accom_name %></h5>
+                    <p><%= booking.date%></p>
+                    <p>£<%= booking.total_cost %></p>
+                    <br>
+                </div>
+            </div>
+        <% end %>
+    <% end %>
 
 </body>

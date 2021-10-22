@@ -18,13 +18,13 @@ feature 'Viewing my booking' do
     register_user
     login_user
     visit('/view-bookings')
-    expect(page).to have_content('Bookings requested')
+    expect(page).to have_content('You have no booking requests')
   end
 
   scenario 'Should be able to see a list of bookings which have been approvde' do
     register_user
     login_user
     visit('/view-bookings')
-    expect(page).to have_content('Confirmed bookings')
+    expect(page).to have_content('confirmed bookings')
   end
 end

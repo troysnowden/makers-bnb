@@ -120,18 +120,27 @@ class MakersBnb < Sinatra::Base
 
 
   get "/view-bookings" do
-    user_id = session[:user].user_id
-    @request_list = BookingAccess.all_requests_for_visitor(user_id)
-    @requested_accommodations = []
-    @request_list.each do |accom|
-      @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
-      p "XYZ"
-      p @requested_accommodations
-      p @request_list
+    # user_id = session[:user].user_id
+    # @request_list = BookingAccess.all_requests_for_visitor(user_id)
+    # @requested_accommodations = []
+    # @request_list.each do |accom|
+    #   @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
+    #   p "XYZ"
+    #   p @requested_accommodations
+    #   p @request_list
+    # end
+
+    # hash with accommodation name as key and booking as value
+    @booking_requests_visitor_hash = {}
+    BookingAccess.all_requests_for_visitor(session[:user].user_id).each do |request|
+      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
     end
 
-
-    # @confirmed_list = all_confirmed_for_visitor(user_id)
+    # hash with accommodation name as key and booking as value
+    @confirmed_bookings_visitor_hash = {}
+    BookingAccess.all_confirmed_for_visitor(session[:user].user_id).each do |request|
+      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+    end
 
     
     erb :view_bookings
