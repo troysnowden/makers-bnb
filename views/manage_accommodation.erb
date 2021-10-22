@@ -8,6 +8,7 @@
     <% unless @user_accommodations.length.positive? %>
         <h2>You have no accommodations listed</h2><br>
     <% else %>
+        <h2>My accommodations</h2>
         <% @user_accommodations.each do |accom|%>
             <div class="accom-card">
                 <div class="accom-container">
@@ -26,14 +27,25 @@
 
     <h2>Booking requests</h2>
 
+    <% unless @accoms_with_booking_reqs.length.positive? %>
+        <h2>You have no accommodations listed</h2><br>
+    <% else %>
+        <% @accoms_with_booking_reqs.each do |accom|%>
+            <form>
+                <div class="accom-card">
+                    <div class="accom-container">
+                        <h5><%= accom.name %></h5>
+                        <p>22/10/2021</p>
+                        <p> <%= accom.price_per_night %></p>
+                        <input type="submit" value="Confirm" />
+                        <input type="submit" value="Deny" />
+                    </div>
+                </div>
+            </form>
+        <% end %>
+    <% end %>
+
     <h4>You have no booking requests</h4>
-    <%# <form>
-        <h5>Accommodation name</h5>
-        <p>Brief description</p>
-        <p>£80 per night</p>
-        <input type="submit" value="Confirm" />
-        <input type="submit" value="Deny" />
-    </form> %>
 
     <h2>Confirmed bookings</h2>
 

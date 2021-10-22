@@ -44,6 +44,16 @@ class MakersBnb < Sinatra::Base
   get "/manage-accommodation" do
     redirect "/" if session[:user].nil?
     @user_accommodations = AccommodationAccess.all_owned_by_user(session[:user].user_id)
+    @booking_requests_owner = BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id)
+    @confirmed_booking_requests_owner = BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id)
+    @accoms_with_booking_reqs = []
+
+    @booking_requests_owner.each do |request| 
+      @user_accommodations.each do |accom| 
+        @accoms_with_booking_reqs << accom if accom.accommodation_id == request.accommodation_id 
+      end
+    end
+
     erb (:manage_accommodation)
   end
 

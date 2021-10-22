@@ -37,4 +37,33 @@ feature 'Viewing manage accommodation page' do
     expect(page).to have_content("£100.00 per night")
 
   end
+
+  scenario 'Visits manage accommodation page with an accommodation' do
+    register_user
+    login_user
+    visit('/manage-accommodation')
+    click_button "Add accommodation"
+    fill_in('name', with: 'My Villa')
+    fill_in('description', with: '4 bedroom villa')
+    fill_in('price_per_night', with: '100')
+    click_button "Submit"
+    expect(page).to have_content("My Villa")
+    expect(page).to have_content("4 bedroom villa")
+    expect(page).to have_content("£100.00 per night")
+
+    visit('/book-accommodation')
+    click_button "Book My Villa"
+
+    expect(page).to have_current_path("/confirm-booking")
+
+    click_button "Confirm booking"
+
+    expect(page).to have_current_path("/")
+
+    click_button "Manage accommodation"
+
+    expect(page).to have_content("My Villa")
+    expect(page).to have_content("4 bedroom villa")
+    expect(page).to have_content("£100.00 per night")
+  end
 end
