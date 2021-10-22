@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require './lib/user_access'
 require './lib/accommodation_access'
+require './lib/booking_access'
 require './lib/accommodation'
 
 
@@ -84,6 +85,23 @@ class MakersBnb < Sinatra::Base
 
     # actually redirect to the confirm booking screen
     
+    redirect "/confirm-booking"
+  end
+
+  get "/confirm-booking" do
+    @accom = session[:selected_booking]
+    erb(:confirm_booking)
+  end
+
+  post "/confirm-booking" do
+    confirmed_booking = BookingAccess.create(
+      session[:user].user_id,
+      session[:selected_booking].accommodation_id,
+      session[:selected_booking].price_per_night,
+      # hardcoded for now
+      "2021-10-23"
+    )
+
     redirect "/"
   end
 
