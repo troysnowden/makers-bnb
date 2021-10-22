@@ -1,17 +1,23 @@
-
+<html>
+<head>
+    <link rel="stylesheet" href="/assets/booking.css">
+</head>
 <body>
     <h1>MakersBNB</h1>
 
-
-    <% if !@accommodation_list %>
+    <% unless @user_accommodations.length.positive? %>
         <h2>You have no accommodations listed</h2><br>
     <% else %>
-        <% @accommodation_list.each do |accom|%>
-        <h3> <%= accom.name%> </h3>
-        <p> <%= accom.description%> </p>
-        <p><i>£<%= accom.price_per_night %> per night</i></p>
-        <%end%>
-
+        <% @user_accommodations.each do |accom|%>
+            <div class="accom-card">
+                <div class="accom-container">
+                    <h3><%= accom.name %></h3>
+                    <p><%= accom.description %></p>
+                    <p><i>£<%= accom.price_per_night %> per night</i></p>
+                </div>
+            </div>
+            <br>
+        <% end %>
     <% end %>
 
     <form action="/add-accommodation">
@@ -36,3 +42,4 @@
     <p>Brief description</p>
     <p>£80 per night</p> %>
 </body>
+<html>

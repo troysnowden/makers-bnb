@@ -1,4 +1,4 @@
-require 'booking'
+require_relative 'booking'
 
 class BookingAccess
   class << self
