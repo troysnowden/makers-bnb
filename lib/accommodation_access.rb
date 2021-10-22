@@ -35,5 +35,13 @@ class AccommodationAccess
         result[0]['id'], result[0]['owner_id'], result[0]['name'], result[0]['description'], result[0]['price_per_night']
       )
     end
+
+    def filter_by_accom_id(accommodation_id) # pass in accommodation_id?
+      # get all accommodations where accommodation_id = id
+      result = @@database_connection.exec_params('SELECT * FROM accommodations WHERE id = $1;', [accommodation_id])
+      
+      result.map{ |accommodation| Accommodation.new(accommodation['id'], accommodation['user_id'], accommodation['name'], accommodation['description'], accommodation['price_per_night']) }
+    end
+
   end
 end

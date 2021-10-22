@@ -53,6 +53,8 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/manage-accommodation" do
+    user_id = session[:user].user_id
+    @accommodation_list = AccommodationAccess.all_owned_by_user(user_id)
     erb (:manage_accommodation)
   end
 
@@ -88,6 +90,10 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/view-bookings" do
+    user_id = session[:user].user_id
+    @request_list = all_requests_for_visitor(user_id)
+    @confirmed_list = all_confirmed_for_visitor(user_id)
+    @accommodation_id = 
     erb :view_bookings
   end
 

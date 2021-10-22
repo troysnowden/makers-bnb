@@ -1,21 +1,32 @@
 <body>
 <h1>MakersBNB</h1>
 
+    <% if !@booking_list %>
+        <h2>You have no bookings listed</h2><br>
+    <% else %>
+        <% @booking_list.each do |booking|%>
+        <h3> <%= booking.name%> </h3>
+        <p> <%= booking.description%> </p>
+        <p> <%= booking.date%> </p>
 
+        <p><i>£<%= booking.total_cost %> per night</i></p>
+        <%end%>
+
+    <% end %>
 
 
 
 
 <h3>Confirmed bookings</h3>
 
-    <h5>Accommodation name</h5>
+    <h5>booking name</h5>
     <p>Brief description</p>
     <p>£80 per night</p>
 
 
 <h3>Bookings requested</h3>
 
-    <h5>Accommodation name</h5>
+    <h5>booking name</h5>
     <p>Brief description</p>
     <p>£80 per night</p>
 
