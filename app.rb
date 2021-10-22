@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require './lib/user_access'
+require './lib/accommodation'
+
 
 class MakersBnb < Sinatra::Base
 
@@ -63,7 +65,9 @@ class MakersBnb < Sinatra::Base
   end
 
   post "/add-accommodation" do
-    # add accommodation to db
+    user_id = session[:user].user_id
+    new_accomodation = Accommodation.create(user_id, params[:name], params[:description], params[:price_per_night])
+    redirect "/manage-accommodation"
   end
 
   get "/book-accommodation" do
