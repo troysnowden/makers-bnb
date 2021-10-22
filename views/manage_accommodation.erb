@@ -2,13 +2,17 @@
 <body>
     <h1>MakersBNB</h1>
 
-    <!-- <% if !@accommodation %>
-    <h2>You have no accommodations listed</h2><br>
-    <% else %>
-    <h3> <% @accommodation.name%> </h3>
-    <% end %> -->
 
-    <h2>You have no accommodations listed</h2><br>
+    <% if !@accommodation_list %>
+        <h2>You have no accommodations listed</h2><br>
+    <% else %>
+        <% @accommodation_list.each do |accom|%>
+        <h3> <%= accom.name%> </h3>
+        <p> <%= accom.description%> </p>
+        <p><i>£<%= accom.price_per_night %> per night</i></p>
+        <%end%>
+
+    <% end %>
 
     <form action="/add-accommodation">
         <input type="submit" value="Add accommodation" />
