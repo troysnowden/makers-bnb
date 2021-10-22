@@ -53,6 +53,8 @@ class MakersBnb < Sinatra::Base
   end
 
   get "/manage-accommodation" do
+    user_id = session[:user].user_id
+    @accommodation_list = AccommodationAccess.all_owned_by_user(user_id)
     erb (:manage_accommodation)
   end
 
