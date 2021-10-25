@@ -5,31 +5,34 @@
 <body>
   <h1 id="bnb-title">MakersBNB</h1>
   <h2 id="form-subheading">Book accommodation</h2>
-  <form action="">
+  <form action="/search-specific" method="POST">
     <label for="calendar">Please choose the date you would like to stay:</label>
-    <input type="date" id="calendar" name="calendar" required>
+    <input type="date" id="calendar" name="calendar" value="<%= @current_chosen_date%>" required>
     <label for="max_price">Please enter your max price:</label>
-    <input type="number" id="max_price" name="max_price">
+    <input type="number" id="max_price" name="max_price" value="<%= @current_chosen_max_price%>" >
     <input type="submit" value="Search">
   </form>
-
-  <% @test_accoms.each do |accom| %>
-      <div class="accom-card">
-        <div class="accom-container">
-          <h3><%= accom.name %></h3>
-          <p><%= accom.description %></p>
-          <p><i>£<%= accom.price_per_night %> per night</i></p>
-            <form action="/book-accommodation" method="POST">
-              <input type="hidden" id="name" name="name" value=<%= accom.name %>>
-              <input type="hidden" id="description" name="description" value=<%= accom.description %>>
-              <input type="hidden" id="price" name="price" value=<%= accom.price_per_night %>>
-              <input type="hidden" id="id" name="id" value=<%= accom.accommodation_id %>>
-              <input type="submit" id="submit-booking-<%=accom.accommodation_id %>" value="Book <%= accom.name %>">
-            </form>
+  <% unless @test_accoms.length.positive? %>
+    <h3> Uh oh - there are no available places to stay on your chosen date and within your price range</h3>
+  <% else %>
+    <% @test_accoms.each do |accom| %>
+        <div class="accom-card">
+          <div class="accom-container">
+            <h3><%= accom.name %></h3>
+            <p><%= accom.description %></p>
+            <p><i>£<%= accom.price_per_night %> per night</i></p>
+              <form action="/book-accommodation" method="POST">
+                <input type="hidden" id="name" name="name" value=<%= accom.name %>>
+                <input type="hidden" id="description" name="description" value=<%= accom.description %>>
+                <input type="hidden" id="price" name="price" value=<%= accom.price_per_night %>>
+                <input type="hidden" id="id" name="id" value=<%= accom.accommodation_id %>>
+                <input type="submit" id="submit-booking-<%=accom.accommodation_id %>" value="Book <%= accom.name %>">
+              </form>
+          </div>
         </div>
-      </div>
-      <br>
-  <% end %>
+        <br>
+    <% end %>
+  <% end%>
 
 </body>
 

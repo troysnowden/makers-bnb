@@ -50,21 +50,19 @@ class MakersBnb < Sinatra::Base
     # hash with accommodation name as key and booking as value
     @booking_requests_owner_hash = {}
     BookingAccess.all_requests_for_accommodation_owner(session[:user].user_id).each do |request|
-      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @booking_requests_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     # hash with accommodation name as key and booking as value
     @confirmed_bookings_owner_hash = {}
     BookingAccess.all_confirmed_for_accommodation_owner(session[:user].user_id).each do |request|
-      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @confirmed_bookings_owner_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     erb (:manage_accommodation)
   end
 
   post "/respond-to-booking" do
-    p params
-    # change to view booking
     if params[:confirm_booking] == "Confirm"
       BookingAccess.confirm_booking_when_request_accepted(params[:booking_id])
     else
@@ -87,21 +85,24 @@ class MakersBnb < Sinatra::Base
 
   get "/book-accommodation" do
     redirect "/" if session[:user].nil?
-    @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25")
+    @current_chosen_date = session[:current_chosen_date].nil? ? "2021-10-25" : session[:current_chosen_date]
+    @current_chosen_max_price = session[:current_chosen_max_price].nil? ? 999 : session[:current_chosen_max_price]
+    @test_accoms = AccommodationAccess.all_available_within_max_price_on_date(
+      @current_chosen_max_price, @current_chosen_date)
     erb :book_accommodation
   end
 
   post "/book-accommodation" do
-    session[:selected_booking] = AccommodationAccess.all_available_within_max_price_on_date(250, "2021-10-25").select { |key, value| 
+    session[:selected_booking] = AccommodationAccess.all_available_within_max_price_on_date(
+      250, session[:current_chosen_date]).select { |key, value| 
        key.accommodation_id.to_i == params[:id].to_i
     }[0]
-
-    # actually redirect to the confirm booking screen
     
     redirect "/confirm-booking"
   end
 
   get "/confirm-booking" do
+    redirect "/" if session[:user].nil?
     @accom = session[:selected_booking]
     erb(:confirm_booking)
   end
@@ -112,7 +113,7 @@ class MakersBnb < Sinatra::Base
       session[:selected_booking].accommodation_id,
       session[:selected_booking].price_per_night,
       # hardcoded for now
-      "2021-10-23"
+      session[:current_chosen_date]
     )
 
     redirect "/"
@@ -120,30 +121,27 @@ class MakersBnb < Sinatra::Base
 
 
   get "/view-bookings" do
-    # user_id = session[:user].user_id
-    # @request_list = BookingAccess.all_requests_for_visitor(user_id)
-    # @requested_accommodations = []
-    # @request_list.each do |accom|
-    #   @requested_accommodations = AccommodationAccess.filter_by_accom_id(accom.accommodation_id)
-    #   p "XYZ"
-    #   p @requested_accommodations
-    #   p @request_list
-    # end
+    redirect "/" if session[:user].nil?
 
     # hash with accommodation name as key and booking as value
     @booking_requests_visitor_hash = {}
     BookingAccess.all_requests_for_visitor(session[:user].user_id).each do |request|
-      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @booking_requests_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
 
     # hash with accommodation name as key and booking as value
     @confirmed_bookings_visitor_hash = {}
     BookingAccess.all_confirmed_for_visitor(session[:user].user_id).each do |request|
-      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id)[0].name] = request
+      @confirmed_bookings_visitor_hash[AccommodationAccess.filter_by_accom_id(request.accommodation_id).name] = request
     end
-
     
     erb :view_bookings
+  end
+
+  post "/search-specific" do
+    session[:current_chosen_date] = params[:calendar]
+    session[:current_chosen_max_price] = params[:max_price]
+    redirect "/book-accommodation"
   end
 
 end
